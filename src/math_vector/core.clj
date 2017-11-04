@@ -74,24 +74,10 @@
         ::tensor)
      [a b])))
 
-
-(mapv
- #(case (count (shape %))
-    0 ::scalar
-    1 ::vector
-    2 ::matrix
-    ::tensor)
- [[[1]] [2]])
-
 (defmethod mul
   [::scalar ::scalar]
   [a b]
   (* a b))
-
-
-
-(def shape-error
-  )
 
 (defmethod mul
   [::tensor ::scalar]
@@ -124,6 +110,31 @@
   )
 
 (prefer-method mul [::matrix ::vector] [::tensor ::tensor])
+
+
+(defmulti matmul
+  (fn [a b]
+    (mapv
+     #(case (count (shape %))
+        0 ::scalar
+        1 ::vector
+        2 ::matrix
+        ::tensor)
+     [a b])))
+
+(defmethod matmul
+  [::matrix ::matrix]
+  [a b]
+  (when-not (= (second (shape a)) (first (shape b)))
+    (throw
+     (ex-info
+      (str "Incompatible shapes. "
+           "Columns of matrix a must equal rows of vector b. "
+           (second (shape a)) " != " (first (shape b)) ".")
+      {:a a :b b
+       :a_shape (shape a) :b_shape (shape b)})))
+  (mapv (partial mul a) b))
+
 
 
 (defmulti div

@@ -103,3 +103,10 @@
     (is (= (float 1.4142135) (float (size [-1 -1]))))
     (is (= (float 1.7320508) (float (size [1 -1 1]))))
     ))
+
+
+
+(deftest matmul-test
+  (testing "Matrix Multiplication"
+    (is (= [[2 1] [0 -2]]
+           (matmul [[0 1] [2 0]] [[1 1] [-2 0]])))))
