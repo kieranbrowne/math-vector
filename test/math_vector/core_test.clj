@@ -37,8 +37,15 @@
   (testing "Mul vector by scalar"
     (is (= [2 4 6 8] (mul [1 2 3 4] 2)))
     (is (= [2.0 4 -6.0 8] (mul [1.0 2 -3.0 4] 2)))
+    )
+  (testing "Matrix-vector multiplication"
+    ;; rotate vector -90deg
+    (is (= [-1 1] (mul [[0 1] [-1 0]] [1 1])))
+    (is (= [-7 -2] (mul [[0 1] [-1 0]] [-2 7])))
+    ;; shear transformation
+    (is (= [2 1] (mul [[1 0] [1 1]] [1 1])))
+    (is (= [4 2] (mul [[1 0] [1 1]] [2 2])))
     ))
-
 
 (deftest add-test
   (testing "Add two scalars"

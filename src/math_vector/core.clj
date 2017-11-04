@@ -37,15 +37,61 @@
     (mapv fn a)))
 
 
-(defmulti mul
+(defmulti add
   (fn [a b]
     [(class a) (class b)]
     ))
+
+(defmethod add
+  [::scalar ::scalar]
+  [a b]
+  (+ a b))
+
+(defmethod add
+  [::tensor ::scalar]
+  [a b]
+  (unitwise (partial add b) a))
+
+(defmethod add
+  [::scalar ::tensor]
+  [a b]
+  (unitwise (partial add a) b))
+
+(defmethod add
+  [::tensor ::tensor]
+  [a b]
+  (pairwise add a b))
+
+
+
+(defmulti mul
+  (fn [a b]
+    (mapv
+     #(case (count (shape %))
+        0 ::scalar
+        1 ::vector
+        2 ::matrix
+        ::tensor)
+     [a b])))
+
+
+(mapv
+ #(case (count (shape %))
+    0 ::scalar
+    1 ::vector
+    2 ::matrix
+    ::tensor)
+ [[[1]] [2]])
 
 (defmethod mul
   [::scalar ::scalar]
   [a b]
   (* a b))
+
+
+
+(def shape-error
+  )
 
 (defmethod mul
   [::tensor ::scalar]
@@ -58,9 +104,27 @@
   (mul b a))
 
 (defmethod mul
+  [::matrix ::vector]
+  [a b]
+  (when-not (= (second (shape a)) (first (shape b)))
+    (throw
+     (ex-info
+      (str "Incompatible shapes. "
+           "Columns of matrix a must equal rows of  vector b. "
+           (second (shape a)) " != " (first (shape b)) ".")
+      {:a a :b b
+       :a_shape (shape a) :b_shape (shape b)})))
+
+  (apply add (mapv #(mul %1 %2) a b)))
+
+(defmethod mul
   [::tensor ::tensor]
   [a b]
-  (pairwise mul a b))
+  (pairwise mul a b)
+  )
+
+(prefer-method mul [::matrix ::vector] [::tensor ::tensor])
+
 
 (defmulti div
   (fn [a b]
@@ -87,31 +151,6 @@
   [a b]
   (pairwise div a b))
 
-
-(defmulti add
-  (fn [a b]
-    [(class a) (class b)]
-    ))
-
-(defmethod add
-  [::scalar ::scalar]
-  [a b]
-  (+ a b))
-
-(defmethod add
-  [::tensor ::scalar]
-  [a b]
-  (unitwise (partial add b) a))
-
-(defmethod add
-  [::scalar ::tensor]
-  [a b]
-  (unitwise (partial add a) b))
-
-(defmethod add
-  [::tensor ::tensor]
-  [a b]
-  (pairwise add a b))
 
 
 (defn size
