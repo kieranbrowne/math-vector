@@ -1,6 +1,6 @@
 (defproject math-vector "0.1.0-SNAPSHOT"
   :description 
-  "Methods for tensor mathematics with clojure persistant vectors"
+  "Methods for tensor mathematics with clojure persistent vectors"
   :url "http://github.com/kieranbrowne/math-vector"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
