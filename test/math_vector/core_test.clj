@@ -53,3 +53,46 @@
     (is (= [3 4 5 6] (add [1 2 3 4] 2)))
     (is (= [3.0 4 -1.0 6] (add [1.0 2 -3.0 4] 2)))
     ))
+
+
+(deftest normalise-test
+  (testing "Normalize vertical or horizontal vectors"
+    (is (= [1.0] (normalize [1])))
+    (is (= [1.0] (normalize [9])))
+    (is (= [-1.0] (normalize [-200])))
+    (is (= [1.0 0.0] (normalize [1 0])))
+    (is (= [1.0 0.0] (normalize [11 0])))
+    (is (= [0.0 1.0] (normalize [0 1])))
+    (is (= [0.0 -1.0] (normalize [0 -20.2])))
+    (is (= [0.0 -1.0 0.0] (normalize [0 -20.2 0])))
+    (is (= [0.0 0.0 1.0] (normalize [0 0 10000])))
+    (is (= [0.0 0.0 1.0] (normalize [0 0 1e-8])))
+    )
+  (testing "Normalize complex vectors"
+    (is (= (map float [0.70710677 0.70710677]) (map float (normalize [1 1]))))
+    (is (= (map float [-0.70710677 -0.70710677])
+           (map float (normalize [-1 -1]))))
+    (is (=
+         (map float [0.57735026 -0.57735026 0.57735026])
+         (map float (normalize [1 -1 1]))))
+    ))
+
+
+(deftest size-test
+  (testing "Find size of vectors"
+    (is (= 1.0 (size [1])))
+    (is (= 9.0 (size [9])))
+    (is (= 200.0 (size [-200])))
+    (is (= 1.0 (size [1 0])))
+    (is (= 11.0 (size [11 0])))
+    (is (= 1.0 (size [0 1])))
+    (is (= 20.2 (size [0 -20.2])))
+    (is (= 20.2 (size [0 -20.2 0])))
+    (is (= 10000.0 (size [0 0 10000])))
+    (is (= 1e-8 (size [0 0 1e-8])))
+    )
+  (testing "Size complex vectors"
+    (is (= (float 1.4142135) (float (size [1 1]))))
+    (is (= (float 1.4142135) (float (size [-1 -1]))))
+    (is (= (float 1.7320508) (float (size [1 -1 1]))))
+    ))

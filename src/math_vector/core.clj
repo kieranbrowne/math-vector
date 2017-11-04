@@ -62,6 +62,31 @@
   [a b]
   (pairwise mul a b))
 
+(defmulti div
+  (fn [a b]
+    [(class a) (class b)]
+    ))
+
+(defmethod div
+  [::scalar ::scalar]
+  [a b]
+  (/ a b))
+
+(defmethod div
+  [::tensor ::scalar]
+  [a b]
+  (unitwise #(div % b) a))
+
+(defmethod div
+  [::scalar ::tensor]
+  [a b]
+  (unitwise #(div a %) b))
+
+(defmethod div
+  [::tensor ::tensor]
+  [a b]
+  (pairwise div a b))
+
 
 (defmulti add
   (fn [a b]
@@ -87,3 +112,15 @@
   [::tensor ::tensor]
   [a b]
   (pairwise add a b))
+
+
+(defn size
+  "Size of a vector in n dimentional space"
+  [v]
+  (Math/sqrt
+   (transduce
+    (map #(* % %))
+    + v)))
+
+(defn normalize [v]
+  (div v (size v)))
