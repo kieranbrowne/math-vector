@@ -1,8 +1,8 @@
-# math-vector
+# Math Vector (working title)
 
-[![Build Status](https://circleci.com/gh/kieranbrowne/math-vector/tree/master.svg)](https://circleci.com/gh/:owner/:repo/tree/:branch)
+[![Build Status](https://circleci.com/gh/kieranbrowne/math-vector/tree/master.svg)](https://circleci.com/gh/kieranbrowne/mathvector/tree/master)
 
-A Clojure library designed to ... well, that part is up to you.
+A Clojure library providing the bare minimum for doing tensor math with CLojure's PersistentVectors.
 
 ## Usage
 
