@@ -1,5 +1,7 @@
 # math-vector
 
+[![Build Status](https://circleci.com/gh/kieranbrowne/math-vector/tree/master.svg)](https://circleci.com/gh/:owner/:repo/tree/:branch)
+
 A Clojure library designed to ... well, that part is up to you.
 
 ## Usage
