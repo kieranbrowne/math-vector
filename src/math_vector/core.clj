@@ -136,6 +136,8 @@
   (mapv (partial mul a) b))
 
 
+(matmul [[1 1 1] [1 1 1]] [[1 1 1] [1 1 1] [1 1 1]])
+
 
 (defmulti div
   (fn [a b]

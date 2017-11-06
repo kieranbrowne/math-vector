@@ -1,4 +1,4 @@
-(defproject math-vector "0.1.0-SNAPSHOT"
+(defproject kieranbrowne/math-vector "0.1.0-SNAPSHOT"
   :description 
   "Methods for tensor mathematics with clojure persistent vectors"
   :url "http://github.com/kieranbrowne/math-vector"
